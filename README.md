@@ -49,3 +49,24 @@ The example below shows how using streaming it is possible to generate a large d
 In this example you can see how Flask works with generator functions. A route that returns a streamed response needs to return a Response object that is initialized with the generator function. Flask then takes care of invoking the generator and sending all the partial results as chunks to the client.
 For this particular example if you assume Stock.query.all() returns the result of a database query as an iterable, then you can generate a potentially large table one row at a time, so regardless of the number of elements in the query the memory consumption in the Python process will not grow larger and larger due to having to assemble a large response string.
 
+#### Multipart Responses
+The table example above generates a traditional page in small portions, with all the parts concatenated into the final document. This is a good example of how to generate large responses, but something a little bit more exciting is to work with real time data.
+An interesting use of streaming is to have each chunk replace the previous one in the page, as this enables streams to "play" or animate in the browser window. With this technique you can have each chunk in the stream be an image, and that gives you a cool video feed that runs in the browser!
+The secret to implement in-place updates is to use a multipart response. Multipart responses consist of a header that includes one of the multipart content types, followed by the parts, separated by a boundary marker and each having its own part specific content type.
+There are several multipart content types for different needs. For the purpose of having a stream where each part replaces the previous part the multipart/x-mixed-replace content type must be used. To help you get an idea of how this looks, here is the structure of a multipart video stream:
+
+        HTTP/1.1 200 OK
+        Content-Type: multipart/x-mixed-replace; boundary=frame
+
+        --frame
+        Content-Type: image/jpeg
+
+        <jpeg data here>
+        --frame
+        Content-Type: image/jpeg
+
+        <jpeg data here>
+        ...
+        
+As you see above, the structure is pretty simple. The main Content-Type header is set to multipart/x-mixed-replace and a boundary string is defined. Then each part is included, prefixed by two dashes and the part boundary string in their own line. The parts have their own Content-Type header, and each part can optionally include a Content-Length header with the length in bytes of the part payload, but at least for images browsers are able to deal with the stream without the length.
+
