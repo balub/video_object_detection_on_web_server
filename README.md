@@ -9,11 +9,14 @@ Real time data. For some applications a request may need to return data that com
 
 Implementing Streaming With Flask
 Flask provides native support for streaming responses through the use of generator functions. A generator is a special function that can be interrupted and resumed. Consider the following function:
+
                   def gen():
                       yield 1
                       yield 2
                       yield 3
+                      
 This is a function that runs in three steps, each returning a value. Describing how generator functions are implemented is outside the scope of this article, but if you are a bit curious the following shell session will give you an idea of how generators are used:
+
                   >>> x = gen()
                   >>> x
                   <generator object gen at 0x7f06f3059c30>
@@ -27,8 +30,10 @@ This is a function that runs in three steps, each returning a value. Describing 
                   Traceback (most recent call last):
                     File "<stdin>", line 1, in <module>
                   StopIteration
+                  
 You can see in this simple example that a generator function can return multiple results in sequence. Flask uses this characteristic of generator functions to implement streaming.
 The example below shows how using streaming it is possible to generate a large data table, without having to assemble the entire table in memory:
+  
                 from flask import Response, render_template
                 from app.models import Stock
 
