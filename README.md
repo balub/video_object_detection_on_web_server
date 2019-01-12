@@ -191,10 +191,15 @@ Firstly you should enter link
 
     http://localhost:5000/upload
 you can upload video
+
+![alt text](https://cdn-images-1.medium.com/max/1100/1*ra90g2wXF8DkTLSHXjIKIg.png)
+
 Than you can enter link
 
     http://localhost:5000/watch
-    
+
+![alt text](https://cdn-images-1.medium.com/max/1100/1*r5Pvn5TL0zQ_2ZeH5Id76g.png)
+
 Conclusion
 In this article, I present how I used web server flask to implement a real-time object-detection project with Tensorflow. I also show you how I have adapted the original python script from Dat Tran to perform video processing with multiprocessing.
 I will focus on hurdles I have encountered, and what solutions I have found (or not!). The full code is on my Github.
